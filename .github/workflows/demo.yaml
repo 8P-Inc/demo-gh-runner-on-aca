@@ -26,7 +26,7 @@ jobs:
          --resource "https://servicebus.azure.net" \
          --method post \
          --headers BrokerProperties='{"TimeToLive":3600}' \
-         --url "https://${env.AZ_SERVICE_BUS_NAMESPACE}.servicebus.windows.net/${env.AZ_SERVICE_BUS_QUEUE}/messages" \
+         --url "https://${{ env.AZ_SERVICE_BUS_NAMESPACE }}.servicebus.windows.net/${{ env.AZ_SERVICE_BUS_QUEUE }}/messages" \
          --body "${{ github.run_id }}"
      
   deploy:
@@ -46,4 +46,4 @@ jobs:
           az rest \
           --resource "https://servicebus.azure.net" \
           --method delete \
-          --url "https://${env.AZ_SERVICE_BUS_NAMESPACE}.servicebus.windows.net/${env.AZ_SERVICE_BUS_QUEUE}/messages/head"
+          --url "https://${{ env.AZ_SERVICE_BUS_NAMESPACE }}.servicebus.windows.net/${{ env.AZ_SERVICE_BUS_QUEUE }}/messages/head"
