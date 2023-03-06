@@ -47,7 +47,7 @@ jobs:
   scale-in-runner:
     needs: [scale-out-runner, deploy]
     runs-on: ubuntu-latest
-    if: needs.scale-out-runner.result == 'success'
+    if: ${{ always() && needs.scale-out-runner.result == 'success' }}
     steps:
       - name: 'Az CLI login'
         uses: azure/login@v1
