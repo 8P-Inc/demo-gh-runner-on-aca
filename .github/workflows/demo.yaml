@@ -42,6 +42,7 @@ jobs:
       - name: 'Run az commands'
         run: |
           az account show --output table
+          exit 1
 
   scale-in-runner:
     needs: [scale-out-runner, deploy]
