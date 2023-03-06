@@ -28,7 +28,6 @@ jobs:
          --headers BrokerProperties='{"TimeToLive":3600}' \
          --url "https://${{ env.AZ_SERVICE_BUS_NAMESPACE }}.servicebus.windows.net/${{ env.AZ_SERVICE_BUS_QUEUE }}/messages" \
          --body "${{ github.run_id }}"
-         exit 1
      
   deploy:
     needs: [scale-out-runner]
