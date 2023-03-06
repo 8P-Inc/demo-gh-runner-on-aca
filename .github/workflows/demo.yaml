@@ -31,7 +31,7 @@ jobs:
      
   deploy:
     needs: scale-up-runner
-    runs-on: [self-hosted]
+    runs-on: [self-hosted, poc-gh-aca]
     steps:
       - name: 'Az CLI login'
         uses: azure/login@v1
