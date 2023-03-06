@@ -1,13 +1,17 @@
-name: Scale KEDA and Run
+name: Scale up selfhosted runner and run
 on:
    workflow_dispatch:
 
 permissions:
   id-token: write
   contents: read
+  
+env:
+  AZ_SERVICE_BUS_NAMESPACE: ${{ vars.AZ_SERVICE_BUS_NAMESPACE }}
+  AZ_SERVICE_BUS_QUEUE:  ${{ vars.AZ_SERVICE_BUS_QUEUE }}
 
 jobs:
-  deploy:
+  scale-up-runner:
     runs-on: ubuntu-latest
     steps:
       - name: 'Az CLI login'
@@ -16,7 +20,30 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
+      - name: scale up self hosted
+        run: |
+         az rest \
+         --resource "https://servicebus.azure.net" \
+         --method post \
+         --headers BrokerProperties='{"TimeToLive":3600}' \
+         --url "https://${env.AZ_SERVICE_BUS_NAMESPACE}.servicebus.windows.net/${env.AZ_SERVICE_BUS_QUEUE}/messages" \
+         --body "${{ github.run_id }}"
+     
+  deploy:
+    runs-on: poc-gh-aca
+    steps:
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       - name: 'Run az commands'
         run: |
           az account show --output table
+      - name: scale down self hosted
+        run: |
+          az rest \
+          --resource "https://servicebus.azure.net" \
+          --method delete \
+          --url "https://${env.AZ_SERVICE_BUS_NAMESPACE}.servicebus.windows.net/${env.AZ_SERVICE_BUS_QUEUE}/messages/head"
