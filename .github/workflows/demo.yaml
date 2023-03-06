@@ -30,8 +30,8 @@ jobs:
          --body "${{ github.run_id }}"
      
   deploy:
-    needs: [scale-out-runner]
     runs-on: [self-hosted, poc-gh-aca]
+    needs: [scale-out-runner]
     steps:
       - name: 'Az CLI login'
         uses: azure/login@v1
@@ -44,8 +44,8 @@ jobs:
           az account show --output table
 
   scale-in-runner:
-    needs: [scale-out-runner, deploy]
     runs-on: ubuntu-latest
+    needs: [scale-out-runner, deploy]
     if: ${{ always() && needs.scale-out-runner.result == 'success' }}
     steps:
       - name: 'Az CLI login'
