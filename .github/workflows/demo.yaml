@@ -30,6 +30,7 @@ jobs:
          --body "${{ github.run_id }}"
      
   deploy:
+    needs: scale-up-runner
     runs-on: poc-gh-aca
     steps:
       - name: 'Az CLI login'
