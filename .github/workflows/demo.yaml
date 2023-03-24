@@ -42,6 +42,9 @@ jobs:
       - name: 'Run az commands'
         run: |
           az account show --output table
+          _TM=$(( $RANDOM$RANDOM%300 ))
+          echo "sleep $_TM"
+          sleep $_TM
 
   scale-in-runner:
     runs-on: ubuntu-latest
