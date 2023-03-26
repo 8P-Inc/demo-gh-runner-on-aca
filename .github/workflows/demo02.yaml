@@ -1,4 +1,4 @@
-name: Scale up selfhosted runner and run within 2 min
+name: 2min- Scale up selfhosted runner and run
 on:
    workflow_dispatch:
 
