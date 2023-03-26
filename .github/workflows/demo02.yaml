@@ -1,4 +1,4 @@
-name: Scale up selfhosted runner and run
+name: Scale up selfhosted runner and run within 2 min
 on:
    workflow_dispatch:
 
@@ -42,7 +42,7 @@ jobs:
       - name: 'Run az commands'
         run: |
           az account show --output table
-          _TM=$(( $RANDOM$RANDOM%30 ))
+          _TM=$(( $RANDOM$RANDOM%120 ))
           echo "sleep $_TM"
           sleep $_TM
 
